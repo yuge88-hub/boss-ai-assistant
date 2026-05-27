@@ -1,11 +1,11 @@
 ---
 name: boss-ai-assistant
-description: BOSS直聘全流程求职助手——搜索职位打招呼、智能筛选回复、批量发简历换微信换电话、循环监控新消息、输出A/B/C分类报告。当用户提到BOSS直聘、找工作、投简历、打招呼、换微信、换电话、批量沟通、招聘平台自动化时使用此skill。
+description: BOSS直聘全流程求职助手——搜索职位打招呼、智能筛选回复、批量发简历换微信换电话、循环监控新消息、检测到面试自动抓取JD并生成面试准备文档、输出A/B/C分类报告。当用户提到BOSS直聘、找工作、投简历、打招呼、换微信、换电话、批量沟通、面试准备、招聘平台自动化时使用此skill。
 ---
 
 # BOSS直聘求职助手
 
-六阶段全自动求职流水线：发现 → 筛选 → 诊断 → 执行 → 监控 → 报告。
+六阶段全自动求职流水线：发现 → 筛选 → 诊断（含面试准备） → 执行 → 监控 → 报告。
 
 ## 安装（首次使用，只需一次）
 
@@ -162,11 +162,28 @@ opencli boss chatlist --limit 50 -f json
 ### Step 5：决定执行动作
 
 按优先级排序：
-1. 面试邀请 → 只回复确认，不干别的
+1. 面试邀请 → 回复确认 + **触发面试准备**（见下方），不干别的
 2. 对方要手机号 → 回复里直接给号码（不通过平台交换）
 3. 对方要微信 → 回复 + `--exchange wechat`
 4. 真人提问/自动回复/空白 → 回复 + 没发过简历就发简历
 5. 已有联系方式 → 记录到 progress.md
+
+### Step 6：面试准备（A类专属）
+
+当检测到面试邀请或已确认面试时间（A类）时，**立即触发 interview-prep skill**：
+
+1. 从 chatlist 获取该对话的 `security_id`
+2. 运行获取完整 JD：
+   ```bash
+   opencli boss detail "<security_id>" -f json
+   ```
+   输出包含：name, salary, company, **description（JD原文）**, skills, welfare 等
+3. 将 JD 原文 + 公司名 + 岗位名 传给 interview-prep skill
+4. interview-prep 自动完成：速读版 + 公司扫描 + 权重解码 + 核心题预判 + 反问 + 故事填空
+5. 面试准备文档写入 `memory/interview-prep/<公司名>.md`
+6. 更新 boss-progress.md A类条目，补充面试时间和准备文档链接
+
+**不需要用户手动粘贴 JD——全自动抓取并生成。**
 
 ---
 

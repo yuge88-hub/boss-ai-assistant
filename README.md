@@ -69,12 +69,12 @@ Phase 5: 报告          Phase 4.5: 监控       Phase 4: 执行
 # 1. 安装 opencli
 npm i -g @jackwener/opencli
 
-# 2. 克隆本仓库到 Claude Code skills 目录
-git clone https://github.com/yuge88-hub/boss-ai-assistant.git ~/.claude/skills/boss-ai-assistant
+# 2. 克隆本仓库
+git clone https://github.com/yuge88-hub/boss-ai-assistant.git
 
-# 3. 一键安装（复制命令文件+注册到 opencli）
-cd ~/.claude/skills/boss-ai-assistant
-bash scripts/install.sh
+# 3. 一键安装（Skill + opencli 命令扩展）
+cd boss-ai-assistant
+bash install.sh
 
 # 4. 在 Chrome 打开 zhipin.com 登录
 ```
@@ -95,17 +95,20 @@ bash scripts/install.sh
 
 ```
 boss-ai-assistant/
-├── README.md                项目说明
-├── SKILL.md                  AI 工作流指令（核心）
-├── .gitignore
-├── scripts/
-│   ├── install.sh           一键安装脚本
-│   ├── search-greet.js      搜索+批量打招呼命令
-│   └── send.js              发消息/简历/微信/电话命令（修复版）
-├── references/
-│   └── technical-guide.md   技术参考（按钮CSS/DOM结构/调试）
+├── README.md
+├── install.sh                 一键安装（Skill + CLI 扩展）
+├── skills/
+│   ├── boss-ai-assistant/     BOSS求职助手
+│   │   ├── SKILL.md            AI 工作流指令（核心）
+│   │   ├── scripts/
+│   │   │   ├── search-greet.js   搜索+打招呼命令
+│   │   │   └── send.js           发消息/简历/微信/电话（修复版）
+│   │   └── references/
+│   │       └── technical-guide.md  技术参考
+│   └── interview-prep/        面试准备教练
+│       └── SKILL.md            11步面试准备方法论
 └── examples/
-    └── 实战复盘.md          真实案例：一天操作21个打招呼+11份简历+7次换微信
+    └── 实战复盘.md            真实案例：21个打招呼+11份简历+7次微信
 ```
 
 ---
